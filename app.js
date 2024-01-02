@@ -1,4 +1,3 @@
-const fetch = require('node-fetch');
 var sid = 'gff56f135dda7cb38d1afd39729df5ac42d0f1e7';
 deal();
 function deal() {
@@ -177,7 +176,7 @@ fetch("https://iomeu-casino-client.api.relaxg.com/game/rmlogin", {
 sid = s.sid;
 console.log('Successfully updated the SID');
 deal();
-//Keep in mind that ticket in the 'gettoken' fetch is the one that chooses currencies. This is for only eur.
+//Keep in mind that ticket in the 'gettoken' fetch is the one that chooses currencies. This is for only USD.
 });
 });
 };
