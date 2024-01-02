@@ -16,7 +16,7 @@ fetch("https://iomeu-casino-client.api.relaxg.com/game/play", {
   },
   "referrer": "https://cf-iomeu-cdn.relaxg.com/",
   "referrerPolicy": "strict-origin-when-cross-origin",
-  "body": "{\"g\":\"blackjackneo\",\"sid\":\""+sid+"\",\"restoreState\":\"{}\",\"restoreVersion\":20000,\"ga\":\"deal\",\"ba\":\"[0,200,0]\"}",
+  "body": "{\"g\":\"blackjackneo\",\"sid\":\""+sid+"\",\"restoreState\":\"{}\",\"restoreVersion\":2,\"ga\":\"deal\",\"ba\":\"[0,200,0]\"}",
   "method": "POST",
   "mode": "cors",
   "credentials": "omit"
