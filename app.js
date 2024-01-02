@@ -153,7 +153,7 @@ fetch("https://iomeu-casino-client.api.relaxg.com/capi/2.0/casino/token/gettoken
     "Referer": "https://cf-iomeu-cdn.relaxg.com/",
     "Referrer-Policy": "strict-origin-when-cross-origin"
   },
-  "body": "{\"gameref\":\"blackjackneo\",\"ticket\":\"1579A8399606FD4D1D8DBF38159B9BC7DA8A66B4\",\"partnerid\":\"892\",\"mode\":\"dev\",\"channel\":\"web\",\"clientid\":\"\",\"clientversion\":\"2023-08-24 1.8.0\"}",
+  "body": "{\"gameref\":\"blackjackneo\",\"ticket\":\"93E00548CD729EB7DEEE76D6590745769FEC0AB1\",\"partnerid\":\"892\",\"mode\":\"dev\",\"channel\":\"web\",\"clientid\":\"\",\"clientversion\":\"2023-08-24 1.8.0\"}",
   "method": "POST"
 }).then(r => r.json()).then(r => {
 fetch("https://iomeu-casino-client.api.relaxg.com/game/rmlogin", {
@@ -176,7 +176,7 @@ fetch("https://iomeu-casino-client.api.relaxg.com/game/rmlogin", {
 sid = s.sid;
 console.log('Successfully updated the SID');
 deal();
-//Keep in mind that ticket in the 'gettoken' fetch is the one that chooses currencies. This is for only USD.
+//Keep in mind that ticket in the 'gettoken' fetch is the one that chooses currencies. This is for only eur.
 });
 });
 };
