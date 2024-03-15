@@ -53,5 +53,5 @@ fetch("https://rgs-cu2.hacksawgaming.com/api/play/bet", {
 deal();
     };
 });
-}, 300);
+}, 30);
 }
