@@ -24,7 +24,7 @@ var evotoken1 = 'iJibGFja2phY2tjbGFzc2ljX2YwX2cwX2gwX2kwX2owIiwicGlkIjoic2N4NHN3
 var evotoken2 = 'oT9BRu-RkIGUvhNoL44VHCtWtMW7HJhCA_ASw8uzRxRNza68UGMOz9FfGZBs0K5Vw';
 var ses = 'scx4swuw7hursbhzscyafxns2fjyujc4fd17a845';
 var curr = 'MXN';
-var amo = 100;
+var amo = 400;
 var splitt = 0;
 var provider = "babylonrbt";
 deal();
