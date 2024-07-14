@@ -1,4 +1,4 @@
-// EUR
+// usd
 
 const lib = require("blackjack-strategy");
 
@@ -19,12 +19,12 @@ var options = {
                               // (v1.4 or higer) - see below for details
 };
 
-var evotoken = 'eyJraWQiOiIxNjcwOTQwNTA0MTM4IiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJjdXIiOiJFVVIiLCJndHAiOiJibGFja2phY2tjbGFzc2ljIiwicGduIjoiYmxhY2tqYWNrY2xhc3NpY19mMF9nMF9oMF9pMF9qMF9ub3RfbW9iaWxlX3N3IiwianVyIjoiQ1ciLCJoaWVyYXJjaHkiOiJbYmFieWxvbnJidDAwMDAwMV0iLCJtaWQiO';
-var evotoken1 = 'iJibGFja2phY2tjbGFzc2ljX2YwX2cwX2gwX2kwX2owIiwicGlkIjoicnl0Y2VudmRycHJkZm9raSIsImV4cCI6MTcxNTE5OTY5NSwidGlkIjoiYmxhY2tqYWNrMGgwaTBqMCIsImNpZCI6ImJhYnlsb25yYnQwMDAwMDEiLCJzaWQiOiJyeXRjZW52ZHJwcmRmb2tpcjVmZ3dyaHpsNm90Y2ZjbWYyNmM1M2QxIn0.FOvgwqYCWbChkQC5jMkc8';
-var evotoken2 = 'JcCXk0ZTMgZqIoO0cMREzFtByYBty9PFwYwkz7fcK83-Kbc5vR_jfzvbJZpF5pUyQ';
-var ses = 'rytcenvdrprdfokir5fgwrhzl6otcfcmf26c53d1';
-var curr = 'EUR';
-var amo = 4;
+var evotoken = 'eyJraWQiOiIxNjcwOTQwNTA0MTM4IiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJjdXIiOiJNWE4iLCJndHAiOiJibGFja2phY2tjbGFzc2ljIiwicGduIjoiYmxhY2tqYWNrY2xhc3NpY19mMF9nMF9oMF9pMF9qMF9ub3RfbW9iaWxlX3N3IiwianVyIjoiQ1ciLCJoaWVyYXJjaHkiOiJbYmFieWxvbnJidDAwMDAwMV0iLCJtaWQiO';
+var evotoken1 = 'iJibGFja2phY2tjbGFzc2ljX2YwX2cwX2gwX2kwX2owIiwicGlkIjoic2N4NHN3dXc3aHVyc2JoeiIsImV4cCI6MTcyMTE5OTA5NywidGlkIjoiYmxhY2tqYWNrMGgwaTBqMCIsImNpZCI6ImJhYnlsb25yYnQwMDAwMDEiLCJzaWQiOiJzY3g0c3d1dzdodXJzYmh6c2N5YWZ4bnMyZmp5dWpjNGZkMTdhODQ1In0.aMtgGThgMhi-57U-1m18K';
+var evotoken2 = 'oT9BRu-RkIGUvhNoL44VHCtWtMW7HJhCA_ASw8uzRxRNza68UGMOz9FfGZBs0K5Vw';
+var ses = 'scx4swuw7hursbhzscyafxns2fjyujc4fd17a845';
+var curr = 'MXN';
+var amo = 100;
 var splitt = 0;
 var provider = "babylonrbt";
 deal();
@@ -48,19 +48,46 @@ function deal() {
   "credentials": "omit"
 }).then(res => res.text()).then(res => {
         res = res.replace('\n','');
+        if(!res.includes('evo-error-code=2001')) {
+            if(res.match(/dealerhand.handcomplete=(.*?)&/)) {
         if(res.match(/dealerhand.handcomplete=(.*?)&/)[1] === "false") {
         var nextact = res.match(/nextactiontoken=(.*?)&/)[1];
         dobest(nextact, res);
         } else if(res.match(/dealerhand.handcomplete=(.*?)&/)[1] === "true") {
-          setTimeout(function() {
             deal();
-          }, 100);
         };
+    } else {
+
+        console.log('Something happened. Retrying!');
+        deal();
+    }
+    } else {
+        console.log('Önceden el kalmıs!! :(');
+        fetch("https://"+provider+".evo-games.com/public/rng/dragon/servlet/CasinoGameServlet;jsession="+ses+"?action=init&sessid="+ses+"&gameId=blackjackclassic_f0_g0_h0_i0_j0_not_mobile_sw&wantsfreerounds=true&freeroundmode=false&wantsreels=true&no-cache=1716567906861&ne_evo_token1="+evotoken1+"&ne_casinoId=babylonrbt000001&ne_balance_id=combined&ne_currency=CAD&ne_evo_token2="+evotoken2+"&ne_evo_token="+evotoken+"&ne_mode=real&ne_device=desktop", {
+  "headers": {
+    "accept": "*/*",
+    "accept-language": "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
+    "sec-ch-ua": "\"Chromium\";v=\"105\", \")Not;A=Brand\";v=\"8\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "cross-site",
+    "Referer": "https://babylonrbt000001-static2.casinomodule.com/",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  },
+  "body": null,
+  "method": "GET"
+}).then(res => res.text()).then(res => {
+    var nextact = res.match(/nextactiontoken=(.*?)&/)[1];
+    dobest(nextact, res);
+});
+    }
     });
 };
 var i = 0;
 function dobest(nextaction, res) {
-  console.log('Split: ' + splitt);
+//   // console.log('Split: ' + splitt);
   if(res.match(/box.i1.playerhand.i0.availableactions=(.*?)&/)[1] === "INSURANCE%2CNO_INSURANCE" || res.match(/box.i1.playerhand.i0.availableactions=(.*?)&/)[1] === "NO_INSURANCE%2CINSURANCE") {
 
     noins(nextaction, 'dab');
@@ -70,7 +97,7 @@ function dobest(nextaction, res) {
     
     
 } else if(res.match(/box.i1.playerhand.i0.availableactions=(.*?)&/)[1] === "SPLIT%2CNO_SPLIT" || res.match(/box.i1.playerhand.i0.availableactions=(.*?)&/)[1] === "NO_SPLIT%2CSPLIT") { 
-// console.log(res);
+// // console.log(res);
   var playercards = res.match(/box.i1.playerhand.i0.hand=(.*?)&/)[1].split('%2C');
   playercards.forEach((card,i) => {
     if(card[0].includes('T') || card[0].includes('Q') || card[0].includes('K') || card[0].includes('J')) {
@@ -92,10 +119,10 @@ function dobest(nextaction, res) {
       if(dealercard === 1) {
           noins(nextaction);
       };
-      console.log(playercards);
-      console.log('Dealer: ' + dealercard);
+      // console.log(playercards);
+      // console.log('Dealer: ' + dealercard);
       var move = lib.GetRecommendedPlayerAction(playercards, dealercard, 1, true, options);
-      console.log('Move: ' + move);
+      // console.log('Move: ' + move);
       if(move !== 'split') {
         nosplitr(nextaction);
       } else if(move === 'split') {
@@ -115,7 +142,7 @@ playercards.forEach((card,i) => {
     playercards[i] = Number(card[0]);
   }
 });
-console.log(playercards);
+// console.log(playercards);
 var dealercard = (res.match(/dealerhand.hand=(.*?)&/)[1][0]);
 if(dealercard.includes('T') || dealercard.includes('Q') || dealercard.includes('K') || dealercard.includes('J')) {
   dealercard = 10;
@@ -124,7 +151,7 @@ if(dealercard.includes('T') || dealercard.includes('Q') || dealercard.includes('
 } else {
   dealercard = Number(dealercard);
 }
-console.log('Dealer: ' + dealercard);
+// console.log('Dealer: ' + dealercard);
     if(dealercard === 1) {
         noins(nextaction);
     };
@@ -133,9 +160,7 @@ console.log('Dealer: ' + dealercard);
       total+= cardd;
     });
     if(total >= 21) {
-          setTimeout(function() {
-            deal();
-          }, 100);
+      deal();
     } else {
     var move = lib.GetRecommendedPlayerAction(playercards, dealercard, 1, true, options);
     if(move === 'stand') {
@@ -167,7 +192,7 @@ console.log('Dealer: ' + dealercard);
         playercards[i] = Number(card[0]);
       }
     });
-    console.log(playercards);
+    // console.log(playercards);
     var dealercard = (res.match(/dealerhand.hand=(.*?)&/)[1][0]);
     if(dealercard.includes('T') || dealercard.includes('Q') || dealercard.includes('K') || dealercard.includes('J')) {
       dealercard = 10;
@@ -176,7 +201,7 @@ console.log('Dealer: ' + dealercard);
     } else {
       dealercard = Number(dealercard);
     }
-    console.log('Dealer: ' + dealercard);
+    // console.log('Dealer: ' + dealercard);
         if(dealercard === 1) {
             noins(nextaction);
         };
@@ -185,12 +210,10 @@ console.log('Dealer: ' + dealercard);
           total+= cardd;
         });
         if(total >= 21) {
-          setTimeout(function() {
-            deal();
-          }, 100);
+          deal();
         } else {
         var move = lib.GetRecommendedPlayerAction(playercards, dealercard, 1, true, options);
-            console.log('Move: ' + move);
+            // console.log('Move: ' + move);
         if(move === 'stand') {
           stand(nextaction);
         } else if(move === 'hit') {
@@ -222,7 +245,7 @@ console.log('Dealer: ' + dealercard);
       playercards[i] = Number(card[0]);
     }
   });
-  console.log(playercards);
+  // console.log(playercards);
   var dealercard = (res.match(/dealerhand.hand=(.*?)&/)[1][0]);
   if(dealercard.includes('T') || dealercard.includes('Q') || dealercard.includes('K') || dealercard.includes('J')) {
     dealercard = 10;
@@ -231,12 +254,12 @@ console.log('Dealer: ' + dealercard);
   } else {
     dealercard = Number(dealercard);
   }
-  console.log('Dealer: ' + dealercard);
+  // console.log('Dealer: ' + dealercard);
       if(dealercard === 1) {
           noins(nextaction);
       };
       var move = lib.GetRecommendedPlayerAction(playercards, dealercard, 1, true, options);
-      console.log('Move: ' + move);
+      // console.log('Move: ' + move);
       if(move === 'stand') {
         stand(nextaction);
       } else if(move === 'hit') {
@@ -284,9 +307,7 @@ var nextact = r.match(/nextactiontoken=(.*?)&/)[1];
   if(!r.includes('errorcode')) {
       if(r.match(/nextactiontoken=(.*?)&/)[1] === "null") {
           ins = 0;
-          setTimeout(function() {
-            deal();
-          }, 100);
+deal();
 
       } else {
           dobest(nextact ,r);
@@ -319,9 +340,7 @@ var nextact = r.match(/nextactiontoken=(.*?)&/)[1];
   if(!r.includes('errorcode')) {
       if(r.match(/nextactiontoken=(.*?)&/)[1] === "null") {
           ins = 0;
-          setTimeout(function() {
-            deal();
-          }, 100);
+deal();
 
       } else {
           dobest(nextact ,r);
@@ -357,7 +376,7 @@ fetch("https://"+provider+".evo-games.com/public/rng/dragon/servlet/CasinoGameSe
 }).then(pes => pes.text()).then(res => {
     res = res.replace('\n','');
     if(splitt === 1) {
-    console.log(res);
+    // console.log(res);
     }
           var nextact = res.match(/nextactiontoken=(.*?)&/)[1];
           if(nextact !== "null") {
@@ -372,7 +391,7 @@ playercards.forEach((card,i) => {
     playercards[i] = Number(card[0]);
   }
 });
-console.log(playercards);
+// console.log(playercards);
 var dealercard = (res.match(/dealerhand.hand=(.*?)&/)[1][0]);
 if(dealercard.includes('T') || dealercard.includes('Q') || dealercard.includes('K') || dealercard.includes('J')) {
   dealercard = 10;
@@ -381,7 +400,7 @@ if(dealercard.includes('T') || dealercard.includes('Q') || dealercard.includes('
 } else {
   dealercard = Number(dealercard);
 }
-console.log('Dealer: ' + dealercard);
+// console.log('Dealer: ' + dealercard);
           } else if(i === 1) {
             var playercards = res.match(/box.i1.playerhand.i1.hand=(.*?)&/)[1].split('%2C');
             playercards.forEach((card,i) => {
@@ -393,7 +412,7 @@ console.log('Dealer: ' + dealercard);
                 playercards[i] = Number(card[0]);
               }
             });
-            console.log(playercards);
+            // console.log(playercards);
             var dealercard = (res.match(/dealerhand.hand=(.*?)&/)[1][0]);
             if(dealercard.includes('T') || dealercard.includes('Q') || dealercard.includes('K') || dealercard.includes('J')) {
               dealercard = 10;
@@ -402,26 +421,26 @@ console.log('Dealer: ' + dealercard);
             } else {
               dealercard = Number(dealercard);
             }
-            console.log('Dealer: ' + dealercard);
+            // console.log('Dealer: ' + dealercard);
           }
     var total = 0;
     playercards.forEach(cardd => {
       total+= cardd;
     });
-  console.log('Total: ' + total);
+  // console.log('Total: ' + total);
     if(total >= 21) {
       if(splitt === 0) {
-        console.log('Busted.');
+        // console.log('Busted.');
         setTimeout(function() {
         deal();
         }, 100);
       } else if(splitt === 1) {
         if(i === 0) {
-          console.log('ilk el.');
+          // console.log('ilk el.');
           i++;
           dobest(nextact, res);
         } else if(i === 1) {
-        console.log('ikinci el.');
+        // console.log('ikinci el.');
         setTimeout(function() {
           deal();
           }, 100);
@@ -429,16 +448,14 @@ console.log('Dealer: ' + dealercard);
         }
       }
     } else {
-      console.log('Hm napsak ki?');
+      // console.log('Hm napsak ki?');
       dobest(nextact, res);
 
     };
     } else {
       splitt = 0;
       i = 0;
-          setTimeout(function() {
-            deal();
-          }, 100);
+      deal();
     }
 
 });
@@ -465,9 +482,9 @@ fetch("https://"+provider+".evo-games.com/public/rng/dragon/servlet/CasinoGameSe
   "credentials": "omit"
 }).then(pes => pes.text()).then(pes => {
   pes = pes.replace('\n','');
-  // console.log(pes);
+  // // console.log(pes);
   if(splitt === 0) {
-    // console.log('Result: ' + pes.match(/box.i1.playerhand.i0.iswinning=(.*?)&/)[1]);
+    // // console.log('Result: ' + pes.match(/box.i1.playerhand.i0.iswinning=(.*?)&/)[1]);
     setTimeout(() => {
     deal();  
     }, 100);
@@ -476,7 +493,7 @@ fetch("https://"+provider+".evo-games.com/public/rng/dragon/servlet/CasinoGameSe
     if(i === 1) {
       i = 0;
       splitt = 0;
-      // console.log('Result: ' + pes.match(/box.i1.playerhand.i0.iswinning=(.*?)&/)[1]);
+      // // console.log('Result: ' + pes.match(/box.i1.playerhand.i0.iswinning=(.*?)&/)[1]);
       setTimeout(() => {
         deal();  
         }, 100);
@@ -512,7 +529,7 @@ fetch("https://"+provider+".evo-games.com/public/rng/dragon/servlet/CasinoGameSe
 }).then(pes => pes.text()).then(pes => {
     pes = pes.replace('\n','');
 var nextact = pes.match(/nextactiontoken=(.*?)&/)[1];
-    console.log('Split False');
+    // console.log('Split False');
     dobest(nextact, pes);
 
 });
@@ -539,14 +556,14 @@ function splitr(nextaction) {
 }).then(pest => pest.text()).then(pest => {
   pest = pest.replace('\n','');
   if(!pest.includes('errorcode')) {
-  console.log(pest);
+  // console.log(pest);
   var nextact = pest.match(/nextactiontoken=(.*?)&/)[1];
   if(nextact !== "null") {
   splitt = 1;
 
       dobest(nextact, pest);
   } else {
-    console.log('Result: ' + pest.match(/box.i1.playerhand.i0.iswinning=(.*?)&/)[1]);
+    // console.log('Result: ' + pest.match(/box.i1.playerhand.i0.iswinning=(.*?)&/)[1]);
     deal();
   }
   } else {
@@ -576,13 +593,13 @@ function double(nextaction) {
   }).then(pes => pes.text()).then(pes => {
     pes = pes.replace('\n','');
     if(splitt === 0) {
-      // console.log('Result: ' + pes.match(/box.i1.playerhand.i0.iswinning=(.*?)&/)[1]);
+      // // console.log('Result: ' + pes.match(/box.i1.playerhand.i0.iswinning=(.*?)&/)[1]);
       deal();
     } else if(splitt === 1) {
       if(i === 1) {
         i = 0;
         splitt = 0;
-        // console.log('Result: ' + pes.match(/box.i1.playerhand.i0.iswinning=(.*?)&/)[1]);
+        // // console.log('Result: ' + pes.match(/box.i1.playerhand.i0.iswinning=(.*?)&/)[1]);
         deal();
       } else if(i === 0) {
         i++;
